@@ -58,9 +58,7 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
           subnet: {
             id: vnet.properties.subnets[0].id
           }
-          publicIPAddress: {
-            id: publicIP.id
-          }
+
         }
       }
     ]
