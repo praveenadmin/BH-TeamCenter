@@ -1,0 +1,24 @@
+name: Deploy KeyVault with Bicep
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.SECRET }}
+
+      - name: Deploy KeyVault
+        run: |
+          az deployment group create \
+            --resource-group vm-rg-fc \
+            --template-file bicep/keyvault.bicep \
+            --parameters parameters/dev-keyvault.bicepparam
