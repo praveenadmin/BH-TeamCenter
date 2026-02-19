@@ -1,4 +1,4 @@
-name: Deploy Windows VM with Bicep
+name: Deploy JumpHost VM with Bicep
 
 on:
   workflow_dispatch:
@@ -16,14 +16,10 @@ jobs:
         with:
           creds: ${{ secrets.SECRET }}
 
-      - name: Create Resource Group
-        run: |
-          az group create --name vm-rg-fc --location FranceCentral
-
-      - name: Deploy
+      - name: Deploy JumpHost VM
         run: |
           az deployment group create \
             --resource-group vm-rg-fc \
-            --template-file bicep/vm.bicep \
-            --parameters parameters/vm.bicepparam 
-            
+            --template-file bicep/jumphostvm.bicep \
+            --parameters parameters/jumphostvm.bicepparam \
+                         adminPassword=${{ secrets.VM_ADMIN_PASSWORD }}
