@@ -1,5 +1,5 @@
 param storageAccountName string
-param location string = 'eastus'
+param location string = 'francecentral'
 param skuName string = 'Standard_LRS'
 param accessTier string = 'Hot'
 

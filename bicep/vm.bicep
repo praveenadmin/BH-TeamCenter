@@ -1,9 +1,11 @@
+
 param location string = resourceGroup().location
 param vmName string
 param adminUsername string
-@secure()
 param adminPassword string
+param addressPrefix string
 
+// Virtual Network
 resource vnet 'Microsoft.Network/virtualNetworks@2023-02-01' = {
   name: '${vmName}-vnet'
   location: location
@@ -13,25 +15,18 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-02-01' = {
         '10.0.0.0/16'
       ]
     }
-    subnets: [
-      {
-        name: 'default'
-        properties: {
-          addressPrefix: '10.0.0.0/24'
-        }
-      }
-    ]
   }
 }
 
-resource publicIP 'Microsoft.Network/publicIPAddresses@2023-02-01' = {
-  name: '${vmName}-pip'
-  location: location
+
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2023-02-01' = {
+  name: '${vnet.name}/default'
   properties: {
-    publicIPAllocationMethod: 'Dynamic'
+    addressPrefix: addressPrefix
   }
 }
 
+// Network Security Group
 resource nsg 'Microsoft.Network/networkSecurityGroups@2023-02-01' = {
   name: '${vmName}-nsg'
   location: location
@@ -54,6 +49,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2023-02-01' = {
   }
 }
 
+// Network Interface (associate NSG at NIC level; alternatively bind NSG to subnet)
 resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
   name: '${vmName}-nic'
   location: location
@@ -63,11 +59,9 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
         name: 'ipconfig1'
         properties: {
           subnet: {
-            id: vnet.properties.subnets[0].id
+            id: subnet.id
           }
-          publicIPAddress: {
-            id: publicIP.id
-          }
+          // Add private/public IP settings here if needed
         }
       }
     ]
@@ -77,12 +71,13 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
   }
 }
 
+// Virtual Machine
 resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
   name: vmName
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B2s'
+      vmSize: 'Standard_D4s_v3'
     }
     osProfile: {
       computerName: vmName
@@ -93,7 +88,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
       imageReference: {
         publisher: 'MicrosoftWindowsServer'
         offer: 'WindowsServer'
-        sku: '2022-Datacenter'
+        sku: '2025-Datacenter'
         version: 'latest'
       }
       osDisk: {

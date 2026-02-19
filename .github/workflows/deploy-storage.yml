@@ -19,6 +19,6 @@ jobs:
       - name: Deploy Bicep Template
         run: |
           az deployment group create \
-            --resource-group arm-lab-rg \
+            --resource-group vm-rg-fc\
             --template-file bicep/storage.bicep \
             --parameters parameters/dev.bicepparam

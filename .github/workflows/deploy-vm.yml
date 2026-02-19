@@ -18,12 +18,12 @@ jobs:
 
       - name: Create Resource Group
         run: |
-          az group create --name vm-rg --location eastus
+          az group create --name vm-rg-fc --location FranceCentral
 
-      - name: Deploy Bicep Template
+      - name: Deploy
         run: |
           az deployment group create \
-            --resource-group vm-rg \
-            --template-file vm.bicep \
-            --parameters parameters/vm.bicepparam \
-                         adminPassword=${{ secrets.VM_ADMIN_PASSWORD }}
+            --resource-group vm-rg-fc \
+            --template-file bicep/vm.bicep \
+            --parameters parameters/vm.bicepparam 
+            
