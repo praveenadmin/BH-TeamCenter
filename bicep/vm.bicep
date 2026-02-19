@@ -1,6 +1,7 @@
 param location string = resourceGroup().location
 param vmName string
 param adminUsername string
+param addressPrefix string
 
 param adminPassword string
 
@@ -17,7 +18,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-02-01' = {
       {
         name: 'default'
         properties: {
-          addressPrefix: '10.0.0.0/24'
+          addressPrefix: 'addressPrefix'
         }
       }
     ]
