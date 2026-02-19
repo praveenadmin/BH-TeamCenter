@@ -23,7 +23,7 @@ jobs:
       - name: Deploy
         run: |
           az deployment group create \
-            --resource-group vm-rg \
+            --resource-group vm-rg-fc \
             --template-file bicep/vm.bicep \
             --parameters parameters/vm.bicepparam 
             
