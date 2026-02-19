@@ -21,4 +21,4 @@ jobs:
     az deployment group create \
       --resource-group vm-rg-fc \
       --template-file bicep/keyvault.bicep \
-      --parameters @parameters/dev-keyvault.biceppara
+      --parameters parameters/dev-keyvault.bicepparam
