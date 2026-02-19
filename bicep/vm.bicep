@@ -24,13 +24,6 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-02-01' = {
   }
 }
 
-resource publicIP 'Microsoft.Network/publicIPAddresses@2023-02-01' = {
-  name: '${vmName}-pip'
-  location: location
-  properties: {
-    publicIPAllocationMethod: 'Dynamic'
-  }
-}
 
 resource nsg 'Microsoft.Network/networkSecurityGroups@2023-02-01' = {
   name: '${vmName}-nsg'
