@@ -1,5 +1,7 @@
-using '../bicep/vm.bicep'
-
-param vmName = 'winvmgithub01'
-param adminUsername = 'azureuser'
-param adminPassword = 'Cloudcare@123r'
+- name: Deploy Bicep Template
+  run: |
+    az deployment group create \
+      --resource-group vm-rg \
+      --template-file bicep/vm.bicep \
+      --parameters parameters/vm.bicepparam \
+                   adminPassword=${{ secrets.VM_ADMIN_PASSWORD }}
