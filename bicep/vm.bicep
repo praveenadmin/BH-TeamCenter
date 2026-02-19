@@ -1,7 +1,7 @@
 param location string = resourceGroup().location
 param vmName string
 param adminUsername string
-@secure()
+
 param adminPassword string
 
 resource vnet 'Microsoft.Network/virtualNetworks@2023-02-01' = {
