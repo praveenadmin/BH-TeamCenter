@@ -20,10 +20,17 @@ jobs:
         run: |
           az group create --name vm-rg --location eastus
 
-      - name: Deploy Bicep Template
+      - name: Dry run
         run: |
           az deployment group create \
             --resource-group vm-rg \
             --template-file bicep/vm.bicep \
-            --parameters parameters/vm.bicepparam
+            --parameters parameters/vm.bicepparam \ --what-if
+  
+      - name: Deploy
+        run: |
+          az deployment group create \
+            --resource-group vm-rg \
+            --template-file bicep/vm.bicep \
+            --parameters parameters/vm.bicepparam 
             
