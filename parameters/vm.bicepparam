@@ -1,7 +1,3 @@
-- name: Deploy Bicep Template
-  run: |
-    az deployment group create \
-      --resource-group vm-rg \
-      --template-file bicep/vm.bicep \
-      --parameters parameters/vm.bicepparam \
-                   adminPassword=${{ secrets.VM_ADMIN_PASSWORD }}
+param vmName = "testvm"
+param adminUsername = "adminuser"
+param adminPassword = "Cloudcare@123r"
