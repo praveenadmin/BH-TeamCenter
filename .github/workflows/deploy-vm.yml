@@ -18,10 +18,8 @@ jobs:
 
       - name: Create Resource Group
         run: |
-          az group create --name vm-rg --location eastus
+          az group create --name vm-rg-westus --location westus
 
-
-  
       - name: Deploy
         run: |
           az deployment group create \
