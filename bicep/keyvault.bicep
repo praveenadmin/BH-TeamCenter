@@ -17,3 +17,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
     softDeleteRetentionInDays: 90
   }
 }
+
+output keyVaultId string = keyVault.id
+output keyVaultUri string = keyVault.properties.vaultUri
