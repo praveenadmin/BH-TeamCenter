@@ -16,9 +16,9 @@ jobs:
         with:
           creds: ${{ secrets.SECRET }}
 
-      - name: Deploy KeyVault
-        run: |
-          az deployment group create \
-            --resource-group vm-rg-fc \
-            --template-file bicep/keyvault.bicep \
-            --parameters @parameters/dev-keyvault.bicepparam
+- name: Deploy KeyVault
+  run: |
+    az deployment group create \
+      --resource-group vm-rg-fc \
+      --template-file bicep/keyvault.bicep \
+      --parameters @parameters/dev-keyvault.biceppara
