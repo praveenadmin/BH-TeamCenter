@@ -26,4 +26,4 @@ jobs:
             --resource-group vm-rg \
             --template-file vm.bicep \
             --parameters parameters/vm.bicepparam \
-                         adminPassword=${{ secrets.VM_ADMIN_PASSWORD }}
+            --adminPassword=${{ secrets.VM_ADMIN_PASSWORD }}
