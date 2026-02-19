@@ -25,7 +25,8 @@ jobs:
           az deployment group create \
             --resource-group vm-rg \
             --template-file bicep/vm.bicep \
-            --parameters parameters/vm.bicepparam \ --what-if
+            --parameters parameters/vm.bicepparam \ 
+            --what-if
   
       - name: Deploy
         run: |
