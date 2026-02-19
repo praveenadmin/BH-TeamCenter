@@ -1,10 +1,11 @@
+
 param location string = resourceGroup().location
 param vmName string
 param adminUsername string
+param adminPassword string
 param addressPrefix string
 
-param adminPassword string
-
+// Virtual Network
 resource vnet 'Microsoft.Network/virtualNetworks@2023-02-01' = {
   name: '${vmName}-vnet'
   location: location
@@ -14,18 +15,18 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-02-01' = {
         '10.0.0.0/16'
       ]
     }
-    subnets: [
-      {
-        name: 'default'
-        properties: {
-          addressPrefix: 'addressPrefix'
-        }
-      }
-    ]
   }
 }
 
 
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2023-02-01' = {
+  name: '${vnet.name}/default'
+  properties: {
+    addressPrefix: addressPrefix
+  }
+}
+
+// Network Security Group
 resource nsg 'Microsoft.Network/networkSecurityGroups@2023-02-01' = {
   name: '${vmName}-nsg'
   location: location
@@ -48,6 +49,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2023-02-01' = {
   }
 }
 
+// Network Interface (associate NSG at NIC level; alternatively bind NSG to subnet)
 resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
   name: '${vmName}-nic'
   location: location
@@ -57,9 +59,9 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
         name: 'ipconfig1'
         properties: {
           subnet: {
-            id: vnet.properties.subnets[0].id
+            id: subnet.id
           }
-
+          // Add private/public IP settings here if needed
         }
       }
     ]
@@ -69,6 +71,7 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
   }
 }
 
+// Virtual Machine
 resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
   name: vmName
   location: location
