@@ -1,0 +1,29 @@
+name: Deploy Windows VM with Bicep
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.SECRET }}
+
+      - name: Create Resource Group
+        run: |
+          az group create --name vm-rg --location eastus
+
+      - name: Deploy Bicep Template
+        run: |
+          az deployment group create \
+            --resource-group vm-rg \
+            --template-file vm.bicep \
+            --parameters parameters/vm.bicepparam \
+                         adminPassword=${{ secrets.VM_ADMIN_PASSWORD }}
