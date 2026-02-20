@@ -19,7 +19,6 @@ jobs:
         creds: ${{ secrets.SECRET }}
 
     - name: Deploy Bicep
-- name: Deploy Bicep
 
   run: |
     az deployment group create \
