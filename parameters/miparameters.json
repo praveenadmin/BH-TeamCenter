@@ -1,0 +1,8 @@
+{
+  "vmName": {
+    "value": "testvm"
+  },
+  "storageAccountName": {
+    "value": "stvmgithub01"
+  }
+}
