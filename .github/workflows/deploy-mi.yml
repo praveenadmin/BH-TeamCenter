@@ -23,4 +23,4 @@ jobs:
           az deployment group create \
             --resource-group vm-rg-fc \
             --template-file bicep/main.bicep \
-            --parameters parameters/miparameters
+            --parameters parameters/miparameters.bicepparam
