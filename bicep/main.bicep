@@ -16,7 +16,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' existing = {
 // Update VM identity
 resource vmIdentity 'Microsoft.Compute/virtualMachines@2023-03-01' = {
   name: vm.name
-  location: francecentral
+  location: 'francecentral'
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
