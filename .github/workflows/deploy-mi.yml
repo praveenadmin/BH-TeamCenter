@@ -19,8 +19,10 @@ jobs:
         creds: ${{ secrets.SECRET }}
 
     - name: Deploy Bicep
-      run: 
-        az deployment group create \
-          --resource-group vm-rg-fc \
-          --template-file bicep/main.bicep \
-          --parameters parameters/miparameters.json
+- name: Deploy Bicep
+
+  run: |
+    az deployment group create \
+      --resource-group vm-rg-fc \
+      --template-file bicep/main.bicep \
+      --parameters parameters/miparameters.json
