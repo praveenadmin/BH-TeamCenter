@@ -20,7 +20,8 @@ jobs:
 
     - name: Deploy Bicep
 
-  run: |
+run: |
+
     az deployment group create \
       --resource-group vm-rg-fc \
       --template-file bicep/main.bicep \
