@@ -1,56 +1,30 @@
-
-param location string = resourceGroup().location
+param location string
 param vmName string
 param adminUsername string
+@secure()
 param adminPassword string
-param addressPrefix string
 
-// Virtual Network
-resource vnet 'Microsoft.Network/virtualNetworks@2023-02-01' = {
-  name: '${vmName}-vnet'
+param existingVnetName string
+param existingSubnetName string
+
+resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' existing = {
+  name: existingVnetName
+}
+
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2023-04-01' existing = {
+  parent: vnet
+  name: existingSubnetName
+}
+
+resource publicIP 'Microsoft.Network/publicIPAddresses@2023-04-01' = {
+  name: '${vmName}-pip'
   location: location
   properties: {
-    addressSpace: {
-      addressPrefixes: [
-        '10.0.0.0/16'
-      ]
-    }
+    publicIPAllocationMethod: 'Dynamic'
   }
 }
 
-
-resource subnet 'Microsoft.Network/virtualNetworks/subnets@2023-02-01' = {
-  name: '${vnet.name}/default'
-  properties: {
-    addressPrefix: addressPrefix
-  }
-}
-
-// Network Security Group
-resource nsg 'Microsoft.Network/networkSecurityGroups@2023-02-01' = {
-  name: '${vmName}-nsg'
-  location: location
-  properties: {
-    securityRules: [
-      {
-        name: 'Allow-RDP'
-        properties: {
-          priority: 1000
-          direction: 'Inbound'
-          access: 'Allow'
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          destinationPortRange: '3389'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-        }
-      }
-    ]
-  }
-}
-
-// Network Interface (associate NSG at NIC level; alternatively bind NSG to subnet)
-resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
+resource nic 'Microsoft.Network/networkInterfaces@2023-04-01' = {
   name: '${vmName}-nic'
   location: location
   properties: {
@@ -61,23 +35,21 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
           subnet: {
             id: subnet.id
           }
-          // Add private/public IP settings here if needed
+          publicIPAddress: {
+            id: publicIP.id
+          }
         }
       }
     ]
-    networkSecurityGroup: {
-      id: nsg.id
-    }
   }
 }
 
-// Virtual Machine
-resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
+resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
   name: vmName
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_D4s_v3'
+      vmSize: 'Standard_B2s'
     }
     osProfile: {
       computerName: vmName
@@ -88,7 +60,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
       imageReference: {
         publisher: 'MicrosoftWindowsServer'
         offer: 'WindowsServer'
-        sku: '2025-Datacenter'
+        sku: '2019-Datacenter'
         version: 'latest'
       }
       osDisk: {
