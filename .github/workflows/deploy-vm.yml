@@ -22,5 +22,5 @@ jobs:
       run: |
         az deployment group create \
           --resource-group vm-rg-fc \
-          --template-file infra/vm.bicep \
-          --parameters infra/vm.bicepparam
+          --template-file bicep/vm.bicep \
+          --parameters parameters/vm.bicepparam
