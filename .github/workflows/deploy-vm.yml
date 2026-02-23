@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
     - name: Login to Azure
       uses: azure/login@v1
@@ -22,5 +22,5 @@ jobs:
       run: |
         az deployment group create \
           --resource-group vm-rg-fc \
-          --template-file bicep/vm.bicep \
-          --parameters parameters/vm.bicepparam
+          --template-file ./bicep/vm.bicep \
+          --parameters ./parameters/vm.bicepparam
