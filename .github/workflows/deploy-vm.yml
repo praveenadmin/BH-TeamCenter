@@ -1,25 +1,26 @@
-name: Deploy JumpHost VM with Bicep
+name: Deploy Windows VM
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.SECRET }}
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.SECRET }}
 
-      - name: Deploy JumpHost VM
-        run: |
-          az deployment group create \
-            --resource-group vm-rg-fc \
-            --template-file bicep/jumphostvm.bicep \
-            --parameters parameters/jumphostvm.bicepparam \
-                         adminPassword=${{ secrets.VM_ADMIN_PASSWORD }}
+    - name: Deploy Bicep Template
+      run: |
+        az deployment group create \
+          --resource-group vm-rg-fc \
+          --template-file infra/vm.bicep \
+          --parameters infra/vm.bicepparam
